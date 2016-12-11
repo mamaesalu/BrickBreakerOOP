@@ -1,13 +1,44 @@
 
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 
 public class Tellised extends ArrayList {
-    ArrayList tellised;
+    private ArrayList tellised;
+    private int tellisteVahe = 8;
+    private int tellisteSuurusY = 25;
 
-
-    public Tellised() {
+    public Tellised(int tellisteArv, int ridadeArv, double platsiLaius) {
         tellised = new ArrayList();
+        double tellisteSuurusX = ((platsiLaius - ((tellisteArv + 1) * tellisteVahe)) / tellisteArv);
+
+        for (int i = 0; i < ridadeArv; i++) {
+            for (int j = 0; j < tellisteArv; j++) {
+                Rectangle tellis = new Rectangle(tellisteSuurusX, tellisteSuurusY);
+                double tellisX = tellisteVahe + j * (tellisteVahe + tellisteSuurusX);
+                double tellisY = tellisteVahe + i * (tellisteVahe + tellisteSuurusY);
+                tellis.setX(tellisX);
+                tellis.setY(tellisY);
+                tellis.setFill(Color.DARKOLIVEGREEN);
+                add(tellis);
+            }
+        }
     }
+
+    public Rectangle kontrolliTellised(Circle pall) {
+        Iterator<Rectangle> tellisteIter = iterator();
+        while (tellisteIter.hasNext()) {
+            Rectangle seetellis = tellisteIter.next();
+            if (pall.intersects(seetellis.getLayoutBounds())) {
+                tellisteIter.remove();
+                return seetellis;
+            }
+        }
+        return null;
+    }
+
 }
 

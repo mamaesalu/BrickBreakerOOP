@@ -12,25 +12,24 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
-import java.util.Iterator;
 
 
 public class Game {
-    public Pane plats;
+    private Pane plats;
     private Pall pall;
-    Timeline animation;
-    Klots klots;
+    private Timeline animation;
+    private Klots klots;
     private Tellised tellised;
     int tellisteArv = 3;
     int ridadeArv = 2;
-    Scene scene;
-    int level = 1;
+    private Scene scene;
+    private int level = 1;
     Label tase;
     Label skoorHetkel;
-    int skoor = 0;
-    Image levelxtaust;
-    Stage vajutaSpace;
-    double platsiLaius = 1000;
+    private int skoor = 0;
+    private Image levelxtaust;
+    private Stage vajutaSpace;
+    private double platsiLaius = 1000;
 
     public Game() {
         gamestage();
@@ -94,26 +93,8 @@ public class Game {
     }
 
     public void looTellised(int tellisteArv, int ridadeArv) {
-        tellised = new Tellised();
-        int tellisteVahe = 8;
-        double tellisteSuurusX = ((plats.getWidth() - ((tellisteArv + 1) * tellisteVahe)) / tellisteArv);
-        int tellisteSuurusY = 25;
-
-        for (int i = 0; i < ridadeArv; i++) {
-            for (int j = 0; j < tellisteArv; j++) {
-                Rectangle tellis = new Rectangle(tellisteSuurusX, tellisteSuurusY);
-                double tellisX = tellisteVahe + j * (tellisteVahe + tellisteSuurusX);
-                double tellisY = tellisteVahe + i * (tellisteVahe + tellisteSuurusY);
-                tellis.setX(tellisX);
-                tellis.setY(tellisY);
-                tellis.setId(Integer.toString((i+1)*(j+1)));
-                tellis.setFill(Color.DARKOLIVEGREEN);
-                tellised.add(tellis);
-            }
-        }
+        tellised = new Tellised(tellisteArv, ridadeArv, platsiLaius);
         plats.getChildren().addAll(tellised);
-        System.out.println(tellised);
-        System.out.println(tellised.size() + " tellist platsil");
     }
 
     public void looPall() {
@@ -145,11 +126,20 @@ public class Game {
     }
 
     protected void liigutaPalli() {
-        kontrolliTellised();
+        tellisteKontroll();
         kontrolliKokkop6rget();
         kuvaSkoor();
         pall.liigu();
         LevelOver();
+    }
+
+    private void tellisteKontroll(){
+        Rectangle tellis = tellised.kontrolliTellised(pall);
+        if (tellis != null) {
+            pall.dy = pall.dy * -1;
+            skoor++;
+            plats.getChildren().remove(tellis);
+        }
     }
 
     private void kuvaSkoor() {
@@ -189,18 +179,7 @@ public class Game {
         scene.setRoot(stack);
     }
 
-    private void kontrolliTellised() {
-        Iterator<Rectangle> tellisteIter = tellised.iterator();
-        while (tellisteIter.hasNext()) {
-            Rectangle seetellis = tellisteIter.next();
-            if (pall.intersects(seetellis.getLayoutBounds())) {
-                pall.dy = pall.dy * -1;
-                skoor++;
-                tellisteIter.remove();
-                plats.getChildren().remove(seetellis);
-            }
-        }
-    }
+
 
     public void kontrolliKokkop6rget() {
         if (pall.getPallx() < pall.getPallr() || pall.getPallx() > plats.getWidth() - pall.getPallr()) {

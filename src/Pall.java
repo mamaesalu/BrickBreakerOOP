@@ -9,18 +9,18 @@ public class Pall extends Circle{
     static int dy = 2;
 
     public Pall() {
-        super.setCenterX(x);
-        super.setCenterY(y);
-        super.setRadius(r);
-        super.setFill(Color.DARKBLUE);
-        super.setStroke(Color.CORAL);
+        setCenterX(x);
+        setCenterY(y);
+        setRadius(r);
+        setFill(Color.DARKBLUE);
+        setStroke(Color.CORAL);
     }
 
     public void liigu(){
         x+=dx;
-        super.setCenterX(x);
+        setCenterX(x);
         y+=dy;
-        super.setCenterY(y);
+        setCenterY(y);
     }
 
     public double getPallr(){
