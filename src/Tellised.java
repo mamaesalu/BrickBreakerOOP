@@ -10,8 +10,10 @@ public class Tellised extends ArrayList {
     private ArrayList tellised;
     private int tellisteVahe = 8;
     private int tellisteSuurusY = 25;
+    private static int tellisteArv = 3;
+    private static int ridadeArv = 2;
 
-    public Tellised(int tellisteArv, int ridadeArv, double platsiLaius) {
+    public Tellised(double platsiLaius) {
         tellised = new ArrayList();
         double tellisteSuurusX = ((platsiLaius - ((tellisteArv + 1) * tellisteVahe)) / tellisteArv);
 
@@ -40,5 +42,9 @@ public class Tellised extends ArrayList {
         return null;
     }
 
+    public void nextLevel(){
+        tellisteArv = tellisteArv + 2; //lisa telliseid ritta +2
+        ridadeArv++;//ridade arv +1
+    }
 }
 

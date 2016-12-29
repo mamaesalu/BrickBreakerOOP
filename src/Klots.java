@@ -1,3 +1,4 @@
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 
 public class Klots extends Rectangle{
@@ -26,4 +27,10 @@ public class Klots extends Rectangle{
         }
     }
 
+    public boolean pallP6rkab(Circle pall){
+        if (pall.intersects(getLayoutBounds())){
+            return true;
+        }
+        return false;
+    }
 }

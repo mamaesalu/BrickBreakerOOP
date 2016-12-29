@@ -20,8 +20,6 @@ public class Game {
     private Timeline animation;
     private Klots klots;
     private Tellised tellised;
-    int tellisteArv = 3;
-    int ridadeArv = 2;
     private Scene scene;
     private int level = 1;
     Label tase;
@@ -49,7 +47,7 @@ public class Game {
     private void playlevel(){
         kuvaTaustJaTase();
         looLiikuvKlots();
-        looTellised(tellisteArv, ridadeArv);
+        looTellised();
         looPall();
     }
 
@@ -92,8 +90,8 @@ public class Game {
         klots.setFocusTraversable(true);
     }
 
-    public void looTellised(int tellisteArv, int ridadeArv) {
-        tellised = new Tellised(tellisteArv, ridadeArv, platsiLaius);
+    public void looTellised() {
+        tellised = new Tellised(platsiLaius);
         plats.getChildren().addAll(tellised);
     }
 
@@ -136,7 +134,7 @@ public class Game {
     private void tellisteKontroll(){
         Rectangle tellis = tellised.kontrolliTellised(pall);
         if (tellis != null) {
-            pall.dy = pall.dy * -1;
+            pall.muudaYsuunda();
             skoor++;
             plats.getChildren().remove(tellis);
         }
@@ -162,10 +160,8 @@ public class Game {
                 level++;
                 animation.stop();
                 plats.getChildren().removeAll(pall, klots, tase);
-                tellisteArv = tellisteArv + 2; //lisa telliseid ritta +2
-                ridadeArv++;//ridade arv +1
-                pall.dx = Math.abs(pall.dx)+ 1;//lisa palli liikumise kiirust iga leveli vahetusega
-                pall.dy = Math.abs(pall.dy)+ 1;
+                tellised.nextLevel();
+                pall.lisakiirust();
                 playlevel();
             }
         }
@@ -179,14 +175,12 @@ public class Game {
         scene.setRoot(stack);
     }
 
-
-
     public void kontrolliKokkop6rget() {
         if (pall.getPallx() < pall.getPallr() || pall.getPallx() > plats.getWidth() - pall.getPallr()) {
-            pall.dx = pall.dx * -1;
+            pall.muudaXsuunda();
         }
-        if (pall.getPally() < pall.getPallr() || pall.intersects(klots.getLayoutBounds())) {
-            pall.dy = pall.dy * -1;
+        if (pall.getPally() < pall.getPallr() || klots.pallP6rkab(pall)) {
+            pall.muudaYsuunda();
         }
         else if (pall.getPally() > plats.getHeight()) {
             youLose();
